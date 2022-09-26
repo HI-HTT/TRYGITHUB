@@ -14,8 +14,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-dash_app = dash.Dash(__name__)
-app = dash_app.server
+app = dash.Dash(__name__)
+application = app.server
 
 #---------------------------------------------------------------
 #Taken from https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases
@@ -24,7 +24,7 @@ df = pd.read_csv("COVID-19-geographic-disbtribution-worldwide-2020-03-29.csv")
 dff = df.groupby('countriesAndTerritories', as_index=False)[['deaths','cases']].sum()
 print (dff[:5])
 #---------------------------------------------------------------
-dash_app.layout = html.Div([
+app.layout = html.Div([
     html.Div([
         dash_table.DataTable(
             id='datatable_id',
@@ -101,7 +101,7 @@ dash_app.layout = html.Div([
 ])
 
 #------------------------------------------------------------------
-@dash_app.callback(
+@app.callback(
     [Output('piechart', 'figure'),
      Output('linechart', 'figure')],
     [Input('datatable_id', 'selected_rows'),
@@ -144,4 +144,4 @@ def update_data(chosen_rows,piedropval,linedropval):
 #------------------------------------------------------------------
 
 if __name__ == '__main__':
-    dash_app.run_server(debug=False)
+    application.run_server(debug=True, host = '0.0.0.0', port = '80')
